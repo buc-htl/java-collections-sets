@@ -14,13 +14,13 @@ public class SetExamples {
         set.add("three");
 
         System.out.println(set.size());          // 3
-        System.out.println(set.toString());      // [two, one, three] or
+        System.out.println(set);      // [two, one, three] or
         // [one, two, three] for LinkedHashSet
         System.out.println(set.contains("two")); // true
 
         System.out.println(set.remove("one"));   // true - removes one
         System.out.println(set.add("three"));    // false - duplicates not alowed
-        System.out.println(set.toString());      // [two, three]
+        System.out.println(set);      // [two, three]
 
         System.out.println(set.isEmpty());       // false
         set.clear();
@@ -37,50 +37,55 @@ public class SetExamples {
         set.add("A");
 
         // Neue Menge: v2
-        Vector<String> v2 = new Vector<>(Arrays.asList("E", "B", "C", "D", "A"));
+        Set<String> v2 = new HashSet<>(Arrays.asList("E", "B", "C", "D", "A"));
 
         // Mengen Vereinigung: set U v2
         set.addAll(v2);
-        System.out.println(set.toString());  // [A, B, C, D, E, X, Y, Z]
+        System.out.println(set);  // [A, B, C, D, E, X, Y, Z]
 
         // Neue Menge: v3
-        Vector<String> v3 = new Vector<>(Arrays.asList("B", "Z"));
+        Set<String> v3 = new HashSet<>(Arrays.asList("B", "Z"));
 
         // v3 ist eine Untermenge von set
         System.out.println(set.containsAll(v3)); // true
 
         // Mengen Differenz: set - v3
         set.removeAll(v3);
-        System.out.println(set.toString());   // [A, C, D, E, X, Y]
+        System.out.println(set);   // [A, C, D, E, X, Y]
 
         // Elemente löschen
         v2.remove("C");
-        System.out.println(v2.toString());    // [E, B, D, A]
+        System.out.println(v2);    // [E, B, D, A]
 
         // Mengen Durchschnitt: set A v2
         set.retainAll(v2);
-        System.out.println(set.toString());   // [A, D, E]
+        System.out.println(set);   // [A, D, E]
 
 
         /* ======================= Iteration ========================== */
         System.out.println("*");
-        for (String s : set)
+        for (String s : set) {
             System.out.print(s + " ");      // A D E
 
+            // funktioniert nicht - man kann eine Collection nicht verändern während eine Schleife darüber läuft (ConcurrentModificationException)
+            //set.remove(s);
+        }
+
         System.out.println("\n-");
-        Object[] items = set.toArray();
+        String[] items = set.toArray(new String[0]);
         for (int i = 0; i < items.length; i++) {
             System.out.print(items[i] + " "); // A D E
         }
 
         System.out.println("\n--");
-        for (Iterator it = set.iterator(); it.hasNext(); /**/) {
-            Object o2 = it.next();
+        //verwendet man einen Iterator kann man Elemente aus der Collection entfernen während man darüber iteriert
+        for (Iterator<String> it = set.iterator(); it.hasNext(); /**/) {
+            String o2 = it.next();
             System.out.print(o2 + " ");       // A D E
-            if (o2 instanceof String && ((String) o2).equals("A"))
+            if (o2.equals("A"))
                 it.remove();   // remove A
         }
-        System.out.println("\n" + set.toString());   // [D, E]
+        System.out.println("\n" + set);   // [D, E]
 
         set.add("A");
         set.add("B");
@@ -117,13 +122,13 @@ public class SetExamples {
         System.out.println(set.first()); // A
         System.out.println(set.last());  // E
 
-        SortedSet headPart = set.headSet("D");
+        SortedSet<String> headPart = set.headSet("D");
         System.out.println(headPart);    // [A, B, C]
 
-        SortedSet tailPart = set.tailSet("B");
+        SortedSet<String> tailPart = set.tailSet("B");
         System.out.println(tailPart);    // [B, C, D, E]
 
-        SortedSet subPart = set.subSet("B", "D");
+        SortedSet<String> subPart = set.subSet("B", "D");
         System.out.println(subPart);    // [B, C]
     }
 
