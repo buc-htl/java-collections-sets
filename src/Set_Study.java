@@ -5,11 +5,21 @@ public class Set_Study {
 	public void test() {
 
 		/* Study which method is when called, depending on the type of Set */
-	     Set<Name> names = new HashSet<>(); 	//does not maintain any order
+	    Set<Name> names = new HashSet<>(); 	//does not maintain any order
 		// Set<Name> names = new LinkedHashSet<>();	//maintains the order in which the elements are inserted
-	   	//Set<Name> names = new TreeSet<>();  //ordered by the natural order of Name
+	   	//Set<Name> names = new TreeSet<>();  //ordered by the natural order of Name (see Comparable interface)
 	   // Set<Name> names = new TreeSet<>(new NameComparator());	//ordered by the logic of the Comparator
 	   //Set<Name> names = new TreeSet<>(new NameComparator(false));
+
+		//uses a anonymous class (useful if we need it only in this specific context)
+		/* Set<Name> names = new TreeSet<>(new Comparator<Name>() {
+			@Override
+			public int compare(Name n1, Name n2) {
+				System.out.println("compare of anonymous class called: " + n1 + " compared to " + n2.name);
+				return n1.name.compareToIgnoreCase(n2.name);
+			}
+		}); */
+
 		 Name name1 = new Name("Anton");    System.out.println(" added: " + names.add(name1));
 		 Name name2 = new Name("Beatrix");  System.out.println(" added: " + names.add(name2));
 		 Name name3 = new Name("Cornelia"); System.out.println(" added: " + names.add(name3));
@@ -55,7 +65,9 @@ public class Set_Study {
 			return eq;
 		}
 		
-		@Override  // called only for TreeSet (constructor without comparator)
+		@Override
+		//this method is required by the Comparable interface. It defines the "natural" order of "Name" objects.
+		// called only for TreeSet (constructor without comparator)
 		public int compareTo(Name oldName) {
 			if (oldName == null) throw new NullPointerException();
 			
